@@ -20,3 +20,13 @@ set cursorlineopt=number
 hi clear CursorLineNr
 hi CursorLineNr ctermfg=magenta
 set complete+=i
+packadd termdebug
+let mapleader = " "
+nnoremap <Space> <Nop>
+nnoremap <leader>d :Termdebug bin/out<CR>:close<CR>:resize 8<CR><C-w>w
+nnoremap <leader>r :Run <CR>
+nnoremap <leader>b :Break<CR>
+nnoremap <leader>c :Continue<CR>
+nnoremap <leader>o :Over<CR>
+nnoremap <leader>f :Finish<CR>
+nnoremap <leader>s :Step<CR>
