@@ -26,6 +26,7 @@ nnoremap <Space> <Nop>
 nnoremap <leader>d :Termdebug bin/out<CR>:close<CR>:resize 8<CR><C-w>w
 nnoremap <leader>r :Run <CR>
 nnoremap <leader>b :Break<CR>
+nnoremap <leader>g :Clear<CR>
 nnoremap <leader>c :Continue<CR>
 nnoremap <leader>o :Over<CR>
 nnoremap <leader>f :Finish<CR>
