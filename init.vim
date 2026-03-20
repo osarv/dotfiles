@@ -21,13 +21,12 @@ hi clear CursorLineNr
 hi CursorLineNr ctermfg=magenta
 set complete+=i
 packadd termdebug
-let mapleader = " "
-nnoremap <Space> <Nop>
-nnoremap <leader>d :Termdebug bin/out<CR>:close<CR>:resize 8<CR><C-w>w
-nnoremap <leader>r :Run <CR>
-nnoremap <leader>b :Break<CR>
-nnoremap <leader>g :Clear<CR>
-nnoremap <leader>c :Continue<CR>
-nnoremap <leader>o :Over<CR>
-nnoremap <leader>f :Finish<CR>
-nnoremap <leader>s :Step<CR>
+nnoremap <A-d> :Termdebug bin/out<CR>:close<CR>:resize 8<CR><C-w>w
+nnoremap <A-r> :Run <CR>
+nnoremap <A-b> :Break<CR>
+nnoremap <A-g> :Clear<CR>
+nnoremap <A-c> :Continue<CR>
+nnoremap <A-o> :Over<CR>
+nnoremap <A-e> :Evaluate<CR>
+nnoremap <A-f> :Finish<CR>
+nnoremap <A-s> :Step<CR>
