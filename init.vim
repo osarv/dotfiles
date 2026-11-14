@@ -1,3 +1,7 @@
+" Space as the leader for everything; olang's keys are <Space>r run, b build, t test, f format, e explain, i prompt
+let mapleader = " "
+let maplocalleader = " "
+nnoremap <Space> <Nop>
 filetype plugin indent on
 syntax on
 colo torte
