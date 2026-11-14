@@ -31,12 +31,14 @@ cp gdbinit ~/.gdbinit
 # olang (x86-64 Linux only): build it from source and install it into ~/.local
 # (the compiler, std, the Neovim/Vim packages, and ~/.local/bin on PATH)
 if [ "$(uname -s) $(uname -m)" = "Linux x86_64" ]; then
-    if [ -d ~/olang/.git ]; then
-        git -C ~/olang pull --ff-only
+    # its own checkout, always master: a working checkout elsewhere (~/olang) is never touched
+    src=~/.local/src/olang
+    if [ -d "$src/.git" ]; then
+        git -C "$src" fetch --depth 1 origin master && git -C "$src" reset --hard origin/master
     else
-        git clone https://github.com/osarv/olang ~/olang
+        git clone --depth 1 --branch master https://github.com/osarv/olang "$src"
     fi
-    make -C ~/olang boot && make -C ~/olang install
+    make -C "$src" boot && make -C "$src" install
     # notebooks: JupyterLab, with olang as a kernel
     if command -v pipx > /dev/null 2>&1; then
         pipx install jupyterlab
