@@ -38,7 +38,7 @@ if [ "$(uname -s) $(uname -m)" = "Linux x86_64" ]; then
     else
         git clone --depth 1 --branch master https://github.com/osarv/olang "$src"
     fi
-    make -C "$src" boot && make -C "$src" install
+    make -C "$src"
     # notebooks: JupyterLab, with olang as a kernel
     if command -v pipx > /dev/null 2>&1; then
         pipx install jupyterlab
