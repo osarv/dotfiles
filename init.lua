@@ -38,3 +38,6 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.conceallevel = 2
   end,
 })
+
+-- diagnostics written at the end of their line, as before Neovim 0.11 (which turned that off by default)
+vim.diagnostic.config({ virtual_text = true })
