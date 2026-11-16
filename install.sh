@@ -100,7 +100,7 @@ jupyter() {
     fi
     has_apt && ! termux && apt_ install pipx
     pipx install jupyterlab
-    ~/.local/bin/olang jupyter -install
+    ~/.local/bin/olang serve jupyter -install
 }
 
 targets="${*:-$all}"
