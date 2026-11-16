@@ -24,3 +24,6 @@ set cursorlineopt=number
 hi clear CursorLineNr
 hi CursorLineNr ctermfg=magenta
 set complete+=i
+" Markdown read comfortably: long lines wrap at word boundaries, wrapped list items keep their indentation, and the
+" ** and ` around text are hidden
+autocmd FileType markdown setlocal wrap linebreak breakindent conceallevel=2
