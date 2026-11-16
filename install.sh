@@ -5,9 +5,9 @@
 #   upgrade   the system's packages updated and upgraded, the unused removed (apt)
 #   build     gcc and make (apt)
 #   git       git, and its global settings: name, email, master as the default branch, push sets the upstream
-#   neovim    the newest Neovim release into ~/.local (apt's is too old for olang's completion, which needs 0.11;
-#             termux's own package there), and init.lua into ~/.config/nvim (an old init.vim there removed:
-#             Neovim refuses to start with both)
+#   neovim    the newest Neovim release system-wide, in /opt/nvim and /usr/local/bin, apt's removed (too old for
+#             olang's completion, which needs 0.11; termux's own package there), and init.lua into ~/.config/nvim
+#             (an old init.vim there removed: Neovim refuses to start with both)
 #   gdb       gdb, and gdbinit into ~/.gdbinit
 #   olang     olang built from its own checkout (~/.local/src/olang, always master) and installed into ~/.local,
 #             with clang and the libraries it needs; its prompt edits in vi mode (x86-64 Linux)
@@ -47,15 +47,20 @@ neovim() {
     if termux; then
         apt_ install neovim
     elif [ "$(uname -s) $(uname -m)" = "Linux x86_64" ]; then
-        # the release tarball, unpacked into ~/.local/opt/nvim and linked from ~/.local/bin (put first on PATH)
+        # the newest release, system-wide: unpacked into /opt/nvim and linked from /usr/local/bin, which comes before
+        # /usr/bin; apt's neovim removed (too old for olang's completion, which needs 0.11)
         tmp=$(mktemp -d) || return 1
         curl -fsSL -o "$tmp/nvim.tar.gz" https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz || return 1
-        rm -rf ~/.local/opt/nvim && mkdir -p ~/.local/opt ~/.local/bin
-        tar -xzf "$tmp/nvim.tar.gz" -C ~/.local/opt && mv ~/.local/opt/nvim-linux-x86_64 ~/.local/opt/nvim || return 1
-        ln -sf ~/.local/opt/nvim/bin/nvim ~/.local/bin/nvim
+        sudo rm -rf /opt/nvim /opt/nvim-linux-x86_64
+        sudo tar -xzf "$tmp/nvim.tar.gz" -C /opt && sudo mv /opt/nvim-linux-x86_64 /opt/nvim || return 1
+        sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim
         rm -rf "$tmp"
-        grep -qxF 'export PATH="$HOME/.local/bin:$PATH"' ~/.bashrc 2> /dev/null || echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-        ~/.local/bin/nvim --version | head -1
+        dpkg -s neovim > /dev/null 2>&1 && sudo apt -y remove neovim
+        # what an earlier install.sh put in the home directory
+        rm -rf ~/.local/opt/nvim
+        [ -L ~/.local/bin/nvim ] && rm -f ~/.local/bin/nvim
+        hash -r
+        nvim --version | head -1
     else
         has_apt && apt_ install neovim
     fi
