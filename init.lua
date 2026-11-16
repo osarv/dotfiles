@@ -38,10 +38,3 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.conceallevel = 2
   end,
 })
-
--- Markdown rendered in the buffer: headings, aligned tables, lists and code blocks drawn as they read (Neovim 0.12's
--- own plugin installer fetches it on the first start; its parsers are Neovim's built-in markdown ones)
-if vim.pack then
-  vim.pack.add({ "https://github.com/MeanderingProgrammer/render-markdown.nvim" })
-  require("render-markdown").setup({})
-end
