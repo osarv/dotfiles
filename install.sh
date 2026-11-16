@@ -1,4 +1,14 @@
 #!/bin/bash
+# ./install.sh              everything, olang built from source
+# ./install.sh --no-olang   everything but olang (no clang packages, no build, no Jupyter kernel)
+
+olang=1
+for arg in "$@"; do
+    case "$arg" in
+        --no-olang) olang=0 ;;
+        *) echo "install.sh: unknown option '$arg' (only --no-olang)" >&2; exit 1 ;;
+    esac
+done
 
 if command -v apt 2>&1>/dev/null; then
     if command -v sudo 2>&1>/dev/null; then
@@ -8,8 +18,10 @@ if command -v apt 2>&1>/dev/null; then
         sudo apt -y upgrade
         sudo apt -y install neovim gcc make gdb git
         # olang: clang 18 or newer with its LTO plugin, xz, libffi and the C headers
-        sudo apt -y install clang-18 llvm-18-linker-tools xz-utils libffi-dev libc6-dev
-        sudo apt -y install pipx
+        if [ "$olang" = 1 ]; then
+            sudo apt -y install clang-18 llvm-18-linker-tools xz-utils libffi-dev libc6-dev
+            sudo apt -y install pipx
+        fi
     else
         #termux path
         apt -y update
@@ -30,7 +42,7 @@ cp gdbinit ~/.gdbinit
 
 # olang (x86-64 Linux only): build it from source and install it into ~/.local
 # (the compiler, std, the Neovim/Vim packages, and ~/.local/bin on PATH)
-if [ "$(uname -s) $(uname -m)" = "Linux x86_64" ]; then
+if [ "$olang" = 1 ] && [ "$(uname -s) $(uname -m)" = "Linux x86_64" ]; then
     # its own checkout, always master: a working checkout elsewhere (~/olang) is never touched
     src=~/.local/src/olang
     if [ -d "$src/.git" ]; then
@@ -47,4 +59,6 @@ if [ "$(uname -s) $(uname -m)" = "Linux x86_64" ]; then
 fi
 
 # the olang prompt edits in vi mode
-grep -qxF 'export OLANG_EDIT=vi' ~/.bashrc 2> /dev/null || echo 'export OLANG_EDIT=vi' >> ~/.bashrc
+if [ "$olang" = 1 ]; then
+    grep -qxF 'export OLANG_EDIT=vi' ~/.bashrc 2> /dev/null || echo 'export OLANG_EDIT=vi' >> ~/.bashrc
+fi
